@@ -1,0 +1,30 @@
+﻿@model SistemaEventos.Models.EventoModel
+@{
+    ViewData["Title"] = "Gerar QR Code";
+}
+
+<div class="eventos-page">
+    <div class="eventos-header">
+        <h1>Gerar QR Code</h1>
+        <p>Projete este código para os alunos confirmarem a presença.</p>
+    </div>
+
+    <div style="display: flex; justify-content: center; padding: 20px;">
+        <article class="evento-card" style="align-items: center; max-width: 400px;">
+            <h2>@Model.Nome</h2>
+            <div id="qrcode" style="background: #fff; padding: 15px; border-radius: 12px; margin: 20px 0;"></div>
+            <p>O sistema aceitará apenas presenças de alunos inscritos.</p>
+        </article>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        new QRCode(document.getElementById("qrcode"), {
+            text: "@Model.Id", // O QR Code contém apenas o ID do evento
+            width: 200,
+            height: 200
+        });
+    </script>
+}

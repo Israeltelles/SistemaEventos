@@ -1,0 +1,205 @@
+﻿@model SistemaEventos.Models.UsuarioModel
+
+@{
+    ViewData["Title"] = "Perfil";
+
+    var inicial = !string.IsNullOrWhiteSpace(Model?.Nome)
+        ? Model.Nome.Substring(0, 1).ToUpper()
+        : "U";
+
+    var tipoUsuario = Model.Tipo as string ?? "";
+}
+
+<link rel="stylesheet" href="~/css/Perfil.css" />
+
+<section class="perfil-container">
+
+    <div class="perfil-header">
+        <div class="perfil-avatar">
+            @inicial
+        </div>
+
+        <div class="perfil-info-principal">
+            <h1>@(Model?.Nome ?? "Nome do usuário")</h1>
+            <p>@(Model?.Tipo ?? "Aluno")</p>
+        </div>
+    </div>
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <div class="alert-success">
+            @TempData["Mensagem"]
+        </div>
+    }
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert-error">
+            @TempData["Erro"]
+        </div>
+    }
+
+    <div class="perfil-grid">
+
+        <div class="perfil-card">
+            <h2>Informações pessoais</h2>
+
+            <div class="perfil-dado">
+                <span>Nome</span>
+                <strong>@(Model?.Nome ?? "Não informado")</strong>
+            </div>
+
+            <div class="perfil-dado">
+                <span>RA</span>
+                <strong>@(ViewBag.RaFormatado ?? "Não informado")</strong>
+            </div>
+
+            <div class="perfil-dado">
+                <span>Email</span>
+                <strong>@(Model?.Email ?? "Não informado")</strong>
+            </div>
+
+            <div class="perfil-dado">
+                <span>Telefone</span>
+                <strong>@(ViewBag.TelefoneFormatado ?? "Não informado")</strong>
+            </div>
+        </div>
+
+        @if (tipoUsuario == "Aluno")
+        {
+            <div class="perfil-card">
+                <h2>Eventos e cursos inscritos</h2>
+
+                <div class="curso-item">
+                    <h3>Minhas inscrições</h3>
+                    <p>Consulte os eventos em que você está inscrito.</p>
+                    <a asp-controller="Inscricao" asp-action="MinhasInscricoes">Ver inscrições</a>
+                </div>
+
+                <div class="curso-item">
+                    <h3>Certificados</h3>
+                    <p>Acesse seus certificados emitidos após confirmação de presença.</p>
+                    <a asp-controller="Inscricao" asp-action="Certificado">Ver certificados</a>
+                </div>
+            </div>
+        }
+
+        <div class="perfil-card">
+            <h2>Opções da conta</h2>
+
+            <p class="perfil-card-texto">
+                Atualize seus dados de contato ou altere sua senha de acesso.
+            </p>
+
+            <details class="perfil-opcao">
+                <summary>Alterar telefone</summary>
+
+                <form asp-controller="Usuario" asp-action="AlterarTelefone" method="post" class="perfil-form">
+                    @Html.AntiForgeryToken()
+
+                    <div class="perfil-form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="text"
+                               id="telefone"
+                               name="telefone"
+                               value="@Model?.Telefone"
+                               class="form-control mascara-telefone"
+                               maxlength="15"
+                               inputmode="numeric"
+                               placeholder="(99) 99999-9999" />
+                    </div>
+
+                    <button type="submit" class="btn-perfil">
+                        Salvar telefone
+                    </button>
+                </form>
+            </details>
+
+            <details class="perfil-opcao">
+                <summary>Alterar senha</summary>
+
+                <form asp-controller="Usuario" asp-action="AlterarSenha" method="post" class="perfil-form">
+                    @Html.AntiForgeryToken()
+
+                    <div class="perfil-form-group">
+                        <label for="senhaAtual">Senha atual</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="senhaAtual" name="senhaAtual" placeholder="Digite sua senha atual" required />
+                            <button type="button" class="toggle-password" data-password-toggle="senhaAtual" aria-label="Mostrar senha" aria-pressed="false">
+                                <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+                                <svg data-eye-closed viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m3 3 18 18M10.6 6.2A9.8 9.8 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3 3.6M6.2 6.4C3.8 8 2.5 12 2.5 12s3.4 6 9.5 6a9.7 9.7 0 0 0 3.1-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="perfil-form-group">
+                        <label for="novaSenha">Nova senha</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="novaSenha" name="novaSenha" placeholder="Digite a nova senha" required />
+                            <button type="button" class="toggle-password" data-password-toggle="novaSenha" aria-label="Mostrar senha" aria-pressed="false">
+                                <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+                                <svg data-eye-closed viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m3 3 18 18M10.6 6.2A9.8 9.8 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3 3.6M6.2 6.4C3.8 8 2.5 12 2.5 12s3.4 6 9.5 6a9.7 9.7 0 0 0 3.1-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="perfil-form-group">
+                        <label for="confirmarSenha">Confirmar nova senha</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirme a nova senha" required />
+                            <button type="button" class="toggle-password" data-password-toggle="confirmarSenha" aria-label="Mostrar senha" aria-pressed="false">
+                                <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+                                <svg data-eye-closed viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m3 3 18 18M10.6 6.2A9.8 9.8 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3 3.6M6.2 6.4C3.8 8 2.5 12 2.5 12s3.4 6 9.5 6a9.7 9.7 0 0 0 3.1-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-perfil btn-outline">
+                        Alterar senha
+                    </button>
+                </form>
+            </details>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+    function somenteNumeros(valor) {
+            return valor.replace(/\D/g, "");
+        }
+
+    function formatarTelefone(valor) {
+        let numeros = somenteNumeros(valor).slice(0, 11);
+
+        if (numeros.length <= 2) {
+            return numeros;
+        }
+
+        if (numeros.length <= 6) {
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
+        }
+
+        if (numeros.length <= 10) {
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 6)}-${numeros.slice(6)}`;
+        }
+
+        return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7)}`;
+    }
+
+   
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const campoTelefone = document.getElementById("telefone");
+   
+
+        if (campoTelefone) {
+            campoTelefone.value = formatarTelefone(campoTelefone.value);
+
+            campoTelefone.addEventListener("input", function () {
+                this.value = formatarTelefone(this.value);
+            });
+        }
+    });
+</script>

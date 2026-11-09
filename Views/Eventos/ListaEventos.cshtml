@@ -1,0 +1,160 @@
+﻿@model IEnumerable<SistemaEventos.Models.EventoModel>
+
+@{
+    ViewData["Title"] = "Eventos Institucionais";
+
+    var eventos = Model ?? Enumerable.Empty<SistemaEventos.Models.EventoModel>();
+}
+
+<link rel="stylesheet" href="~/css/Eventos.css" />
+
+<section class="eventos-page">
+
+    <div class="eventos-header">
+        <h1>Eventos Institucionais</h1>
+        <p>Consulte os eventos disponíveis e realize sua inscrição.</p>
+    </div>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="evento-alert-success">✔ @TempData["Sucesso"]</div>
+    }
+    @if (TempData["Erro"] != null)
+    {
+        <div class="evento-alert-erro">✖ @TempData["Erro"]</div>
+    }
+
+    <div class="eventos-busca-wrapper">
+        <input type="text"
+               id="campoBusca"
+               class="eventos-busca-input"
+               placeholder="Buscar evento por nome, descrição ou local..."
+               oninput="filtrarEventos()" />
+    </div>
+
+    @if (!eventos.Any())
+    {
+        <div class="eventos-empty">
+            <div class="eventos-empty-icon">📅</div>
+            <h2>Nenhum evento disponível</h2>
+            <p>Assim que novos eventos forem cadastrados, eles aparecerão nesta página.</p>
+        </div>
+    }
+    else
+    {
+        <div class="eventos-grid" id="listaEventos">
+
+            @foreach (var evento in eventos)
+            {
+                @* Inscrições encerram 2h antes do início do evento *@
+                var limiteInscricao = evento.Data.Date + evento.HoraInicio - TimeSpan.FromHours(2);
+                var inscricaoAberta = DateTime.Now < limiteInscricao;
+
+                <article class="evento-card"
+                         data-busca="@($"{evento.Nome} {evento.Descricao} {evento.Local}".ToLower())">
+
+                    <span class="evento-tag">Evento</span>
+
+                    <h2>@evento.Nome</h2>
+
+                    <p class="evento-descricao">
+                        @evento.Descricao
+                    </p>
+
+                    <div class="evento-infos">
+                        <p>
+                            <span>📅</span>
+                            @evento.Data.ToString("dd/MM/yyyy")
+                        </p>
+                        <p>
+                            <span>🕐</span>
+                            @evento.HoraInicio.ToString(@"hh\:mm") - @evento.HoraFim.ToString(@"hh\:mm")
+                        </p>
+                        <p>
+                            <span>📍</span>
+                            @evento.Local
+                        </p>
+                        @if (!inscricaoAberta)
+                        {
+                            <p class="texto-encerrado">
+                                <span>🔒</span> Inscrições encerradas
+                            </p>
+                        }
+                    </div>
+
+                    <div class="evento-card-actions">
+
+                        <a asp-controller="Eventos"
+                               asp-action="Detalhes"
+                               asp-route-id="@evento.Id"
+                               class="btn-evento-outline">
+                            Ver detalhes
+                        </a>
+
+                        @if (inscricaoAberta)
+                        {
+                            <form asp-controller="Inscricao"
+                                  asp-action="Inscricao"
+                                  asp-route-eventoId="@evento.Id"
+                                  method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-evento-primary">
+                                    Inscrever-se
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="btn-evento-primary mi-btn-disabled">
+                                Inscrever-se
+                            </span>
+                        }
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+    }
+
+</section>
+
+@section Scripts {
+    <script>
+        function filtrarEventos() {
+            const termo = document.getElementById("campoBusca").value.toLowerCase();
+            const cards = document.querySelectorAll(".evento-card");
+            let encontrados = 0;
+
+            cards.forEach(card => {
+                const texto = card.dataset.busca;
+
+                if (texto.includes(termo)) {
+                    card.style.display = "";
+                    encontrados++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            let aviso = document.getElementById("eventoAvisoBusca");
+
+            if (encontrados === 0 && cards.length > 0) {
+                if (!aviso) {
+                    aviso = document.createElement("div");
+                    aviso.id = "eventoAvisoBusca";
+                    aviso.className = "eventos-empty eventos-empty-busca";
+                    aviso.innerHTML = `
+                        <div class="eventos-empty-icon">🔎</div>
+                        <h2>Nenhum evento encontrado</h2>
+                        <p>Tente buscar por outro nome, descrição ou local.</p>
+                    `;
+                    document.querySelector(".eventos-page").appendChild(aviso);
+                }
+            } else {
+                if (aviso) aviso.remove();
+            }
+        }
+    </script>
+}

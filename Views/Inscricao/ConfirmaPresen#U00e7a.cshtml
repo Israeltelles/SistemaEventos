@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Confirmar Presença";
+}
+
+<div class="eventos-page">
+    <div class="eventos-header">
+        <h1>Confirmar Presença</h1>
+        <p>Aponte a câmera para o QR Code do evento.</p>
+    </div>
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="evento-alert-erro">@TempData["Erro"]</div>
+    }
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="evento-alert-success">@TempData["Sucesso"]</div>
+    }
+
+    <div id="leitor-camera" style="width: 100%; max-width: 500px; margin: 0 auto; border-radius: 14px; overflow: hidden;"></div>
+
+    <form id="formConfirmacao" asp-action="ConfirmaPresenca" method="post" style="display:none;">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="eventoId" name="eventoId" />
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        function onScanSuccess(decodedText) {
+            html5QrcodeScanner.clear(); // Para a câmera
+            document.getElementById("eventoId").value = decodedText; // Define o ID
+            document.getElementById("formConfirmacao").submit(); // Envia
+        }
+        let html5QrcodeScanner = new Html5QrcodeScanner("leitor-camera", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+}

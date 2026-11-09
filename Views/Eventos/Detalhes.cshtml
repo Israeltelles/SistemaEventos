@@ -1,0 +1,59 @@
+@model SistemaEventos.Models.EventoModel
+
+@{
+    ViewData["Title"] = "Detalhes do Evento";
+}
+
+<link rel="stylesheet" href="~/css/Eventos.css" />
+
+<section class="evento-criar-wrapper">
+
+    <div class="evento-criar-header">
+        <h1>@Model.Nome</h1>
+        <p>Detalhes do evento institucional</p>
+    </div>
+
+    <div class="evento-criar-container">
+
+        <div class="evento-criar-form-section">
+
+            <h2>Informações do Evento</h2>
+
+            <div class="evento-criar-info-card">
+                <h3>Descrição</h3>
+                <p>@Model.Descricao</p>
+            </div>
+
+            <div class="evento-criar-info-card">
+                <h3>Data e horário</h3>
+                <p>@Model.Data.ToString("dd/MM/yyyy")</p>
+                <p>@Model.HoraInicio.ToString(@"hh\:mm") - @Model.HoraFim.ToString(@"hh\:mm")</p>
+            </div>
+
+            <div class="evento-criar-info-card">
+                <h3>Local</h3>
+                <p>@Model.Local</p>
+            </div>
+
+            <div class="evento-criar-actions">
+                <a asp-controller="Eventos" asp-action="ListaEventos" class="btn-evento-voltar">
+                    Voltar
+                </a>
+            </div>
+
+        </div>
+
+        <div class="evento-criar-info-section">
+
+            <h2>Responsável</h2>
+
+            <div class="evento-criar-info-card">
+                <h3>Coordenador</h3>
+                <p>@(Model.Coordenador?.Nome ?? "Não informado")</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

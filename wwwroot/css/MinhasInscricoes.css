@@ -1,0 +1,78 @@
+﻿.mi-badge-confirmado,
+.mi-badge-pendente {
+    width: fit-content;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.mi-badge-confirmado {
+    background: rgba(40, 167, 69, 0.14);
+    border: 1px solid rgba(40, 167, 69, 0.35);
+    color: #5dd97a;
+}
+
+.mi-badge-pendente {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid #333;
+    color: #888;
+}
+
+.btn-evento-cancelar {
+    width: 100%;
+    min-height: 46px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(192, 57, 43, 0.5);
+    color: #e05c4b;
+    transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+}
+
+    .btn-evento-cancelar:hover {
+        background: rgba(192, 57, 43, 0.12);
+        border-color: rgba(192, 57, 43, 0.8);
+        transform: translateY(-2px);
+    }
+
+.mi-btn-disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.evento-alert-erro {
+    background: rgba(192, 57, 43, 0.12);
+    color: #e05c4b;
+    border: 1px solid rgba(192, 57, 43, 0.35);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    animation: eventosFadeUp 0.35s ease;
+}
+/* Container do leitor de câmera */
+#leitor-camera {
+    border: 2px solid #252525;
+    background: #151515;
+}
+
+/* Ajustes para o QR Code gerado */
+#qrcode {
+    border: 1px solid #333;
+}
+
+/* Centralização mobile */
+@media (max-width: 600px) {
+    #leitor-camera {
+        width: 100% !important;
+    }
+}

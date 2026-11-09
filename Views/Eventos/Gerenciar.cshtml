@@ -1,0 +1,130 @@
+﻿@model IEnumerable<SistemaEventos.Models.EventoModel>
+
+@{
+    ViewData["Title"] = "Gerenciar Eventos";
+    var eventos = Model ?? Enumerable.Empty<SistemaEventos.Models.EventoModel>();
+}
+
+<link rel="stylesheet" href="~/css/Eventos.css" />
+
+<section class="eventos-page">
+
+    <div class="eventos-header">
+        <h1>Gerenciar Eventos</h1>
+        <p>Edite ou exclua os eventos cadastrados no sistema.</p>
+    </div>
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <div class="evento-alert-success">✔ @TempData["Mensagem"]</div>
+    }
+
+    <div class="eventos-busca-wrapper">
+        <input type="text"
+               id="campoBusca"
+               class="eventos-busca-input"
+               placeholder="Buscar evento por nome, descrição ou local..."
+               oninput="filtrarEventos()" />
+    </div>
+
+    @if (!eventos.Any())
+    {
+        <div class="eventos-empty">
+            <div class="eventos-empty-icon">🛠️</div>
+            <h2>Nenhum evento cadastrado</h2>
+            <p>Crie um novo evento para que ele apareça aqui.</p>
+            <div class="eventos-empty-busca">
+                <a asp-controller="Eventos" asp-action="Criar" class="btn-evento-primary"
+                       style="display:inline-flex; padding:12px 24px; border-radius:12px; text-decoration:none;">
+                    Criar evento
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="eventos-grid" id="listaEventos">
+
+            @foreach (var evento in eventos)
+            {
+                <article class="evento-card"
+                         data-busca="@($"{evento.Nome} {evento.Descricao} {evento.Local}".ToLower())">
+
+                    <span class="evento-tag">Evento</span>
+
+                    <h2>@evento.Nome</h2>
+
+                    <p class="evento-descricao">@evento.Descricao</p>
+
+                    <div class="evento-infos">
+                        <p><span>📅</span> @evento.Data.ToString("dd/MM/yyyy")</p>
+                        <p><span>🕐</span> @evento.HoraInicio.ToString(@"hh\:mm") - @evento.HoraFim.ToString(@"hh\:mm")</p>
+                        <p><span>📍</span> @evento.Local</p>
+                    </div>
+
+                    <div class="evento-card-actions">
+
+                        <a asp-controller="Eventos"
+                               asp-action="Editar"
+                               asp-route-id="@evento.Id"
+                               class="btn-evento-outline">
+                            ✏️ Editar
+                        </a>
+
+                        <form asp-controller="Eventos"
+                              asp-action="Excluir"
+                              asp-route-id="@evento.Id"
+                              method="post"
+                              onsubmit="return confirm('Deseja excluir o evento \'@evento.Nome\'?')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-evento-excluir">
+                                🗑️ Excluir
+                            </button>
+                        </form>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+    }
+
+</section>
+
+@section Scripts {
+    <script>
+        function filtrarEventos() {
+            const termo = document.getElementById("campoBusca").value.toLowerCase();
+            const cards = document.querySelectorAll(".evento-card");
+            let encontrados = 0;
+
+            cards.forEach(card => {
+                const texto = card.dataset.busca;
+                if (texto.includes(termo)) {
+                    card.style.display = "";
+                    encontrados++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            let aviso = document.getElementById("eventoAvisoBusca");
+            if (encontrados === 0 && cards.length > 0) {
+                if (!aviso) {
+                    aviso = document.createElement("div");
+                    aviso.id = "eventoAvisoBusca";
+                    aviso.className = "eventos-empty eventos-empty-busca";
+                    aviso.innerHTML = `
+                        <div class="eventos-empty-icon">🔎</div>
+                        <h2>Nenhum evento encontrado</h2>
+                        <p>Tente buscar por outro nome, descrição ou local.</p>
+                    `;
+                    document.querySelector(".eventos-page").appendChild(aviso);
+                }
+            } else {
+                if (aviso) aviso.remove();
+            }
+        }
+    </script>
+}

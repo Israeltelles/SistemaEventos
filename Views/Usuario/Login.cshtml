@@ -1,0 +1,106 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Entrar";
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0914" />
+    <title>@ViewData["Title"] - SistemaEventos</title>
+    <link rel="stylesheet" href="~/css/LoginCadastro.css" />
+    <link rel="stylesheet" href="~/css/Theme.css" />
+</head>
+<body class="auth-login-page">
+    <main class="auth-login-shell">
+        <section class="auth-showcase" aria-label="Apresentação do portal de eventos">
+            <a asp-controller="Home" asp-action="Index" class="auth-brand">
+                <span class="auth-brand-mark">SE</span>
+                <span><strong>EVENTOS</strong><small>PORTAL ACADÊMICO</small></span>
+            </a>
+
+            <div class="showcase-copy">
+                <span class="showcase-eyebrow"><i></i> CONHECIMENTO EM MOVIMENTO</span>
+                <h1>Ideias ganham vida quando <em>nos encontramos.</em></h1>
+                <p>Descubra eventos, participe de novas experiências e acompanhe cada conquista da sua jornada acadêmica.</p>
+            </div>
+
+            <div class="event-visual" aria-hidden="true">
+                <div class="event-visual-glow"></div>
+                <div class="event-orbit event-orbit--outer"></div>
+                <div class="event-orbit event-orbit--inner"></div>
+                <div class="event-visual-core">
+                    <span class="core-symbol">
+                        <svg viewBox="0 0 48 48" fill="none"><rect x="7" y="10" width="34" height="31" rx="7" stroke="currentColor" stroke-width="2"/><path d="M15 6v9M33 6v9M7 19h34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m18 29 4 4 9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <strong>Sua agenda</strong>
+                    <small>em um só lugar</small>
+                </div>
+                <div class="floating-event floating-event--one">
+                    <span class="floating-event-icon">✦</span>
+                    <span><small>PALESTRA</small><strong>Novas ideias</strong></span>
+                    <b>18 JUN</b>
+                </div>
+                <div class="floating-event floating-event--two">
+                    <span class="floating-event-icon">⌘</span>
+                    <span><small>WORKSHOP</small><strong>Aprender fazendo</strong></span>
+                    <b>24 JUN</b>
+                </div>
+                <div class="floating-event floating-event--three">
+                    <span class="floating-event-icon">✓</span>
+                    <span><small>CONQUISTA</small><strong>Certificado emitido</strong></span>
+                </div>
+                <span class="visual-spark visual-spark--one"></span>
+                <span class="visual-spark visual-spark--two"></span>
+                <span class="visual-spark visual-spark--three"></span>
+            </div>
+
+            <div class="showcase-bottom">
+                <span>EVENTOS</span><i></i><span>INSCRIÇÕES</span><i></i><span>PRESENÇA</span><i></i><span>CERTIFICADOS</span>
+            </div>
+        </section>
+
+        <section class="auth-panel-area">
+            <div class="auth-panel-topline"><span>ÁREA DO PARTICIPANTE</span><span class="auth-status"><i></i> AMBIENTE ACADÊMICO</span></div>
+            <div class="auth-box">
+                <div class="auth-heading">
+                    <span class="auth-heading-icon">✳</span>
+                    <p class="auth-kicker">QUE BOM TER VOCÊ AQUI</p>
+                    <h2>Bem-vindo de volta.</h2>
+                    <p class="subtitle">Entre com seus dados para continuar de onde parou.</p>
+                </div>
+
+                <form asp-controller="Usuario" asp-action="Login" method="post" class="auth-login-form">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="input-group">
+                        <label for="ra">RA ou e-mail</label>
+                        <input type="text" id="ra" name="ra" placeholder="Digite seu RA ou e-mail" autocomplete="username" required />
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row"><label for="senhaLogin">Senha</label></div>
+                        <div class="password-wrapper">
+                            <input type="password" id="senhaLogin" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required />
+                            <button type="button" class="toggle-password" data-password-toggle="senhaLogin" aria-label="Mostrar senha" aria-pressed="false">
+                                <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+                                <svg data-eye-closed viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m3 3 18 18M10.6 6.2A9.8 9.8 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3 3.6M6.2 6.4C3.8 8 2.5 12 2.5 12s3.4 6 9.5 6a9.7 9.7 0 0 0 3.1-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary auth-submit">Entrar na plataforma <span aria-hidden="true">→</span></button>
+                </form>
+
+                <div class="auth-footer">
+                    <span>Ainda não tem uma conta?</span>
+                    <a asp-controller="Usuario" asp-action="CadastroAluno">Criar conta <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+            <p class="auth-legal">Um espaço para aprender, compartilhar e construir novas experiências.</p>
+        </section>
+    </main>
+    <script src="~/js/ui.js" asp-append-version="true"></script>
+</body>
+</html>

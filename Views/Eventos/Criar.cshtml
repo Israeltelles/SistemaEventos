@@ -1,0 +1,143 @@
+﻿@model SistemaEventos.Models.EventoModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Criar Evento";
+
+    var mensagem = TempData["Mensagem"] as string;
+}
+
+<link rel="stylesheet" href="~/css/Eventos.css" />
+
+<section class="evento-criar-wrapper">
+
+    <div class="evento-criar-header">
+        <h1>Criar Evento</h1>
+        <p>Adicione um novo evento institucional ao sistema</p>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(mensagem))
+    {
+        <div class="evento-alert-success">
+            @mensagem
+        </div>
+    }
+
+    <div class="evento-criar-container">
+
+        <div class="evento-criar-form-section">
+
+            <h2>Dados do Evento</h2>
+
+            <form asp-controller="Eventos" asp-action="Criar" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="evento-criar-form-group">
+                    <label asp-for="Nome">Nome do Evento</label>
+                    <input asp-for="Nome"
+                           type="text"
+                           placeholder="Digite o nome do evento"
+                           required />
+                    <span asp-validation-for="Nome" class="evento-erro"></span>
+                </div>
+
+                <div class="evento-criar-row">
+                    <div class="evento-criar-form-group">
+                        <label asp-for="Data">Data do Evento</label>
+                        <input asp-for="Data"
+                               type="date"
+                               required />
+                        <span asp-validation-for="Data" class="evento-erro"></span>
+                    </div>
+
+                    <div class="evento-criar-form-group">
+                        <label asp-for="Local">Local do Evento</label>
+                        <input asp-for="Local"
+                               type="text"
+                               placeholder="Local onde será realizado"
+                               required />
+                        <span asp-validation-for="Local" class="evento-erro"></span>
+                    </div>
+                </div>
+
+                <div class="evento-criar-row">
+                    <div class="evento-criar-form-group">
+                        <label asp-for="HoraInicio">Hora de Início</label>
+                        <input asp-for="HoraInicio"
+                               type="time"
+                               required />
+                        <span asp-validation-for="HoraInicio" class="evento-erro"></span>
+                    </div>
+
+                    <div class="evento-criar-form-group">
+                        <label asp-for="HoraFim">Hora de Término</label>
+                        <input asp-for="HoraFim"
+                               type="time"
+                               required />
+                        <span asp-validation-for="HoraFim" class="evento-erro"></span>
+                    </div>
+                </div>
+
+                <div class="evento-criar-form-group">
+                    <label asp-for="Descricao">Descrição do Evento</label>
+                    <textarea asp-for="Descricao"
+                              placeholder="Descreva o evento"
+                              required></textarea>
+                    <span asp-validation-for="Descricao" class="evento-erro"></span>
+                </div>
+
+                <div class="evento-criar-actions">
+                    <a asp-controller="Home" asp-action="Index" class="btn-evento-voltar">
+                        Voltar
+                    </a>
+
+                    <button type="submit" class="btn-evento-salvar">
+                        Criar Evento
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="evento-criar-info-section">
+
+            <h2>Informações</h2>
+
+            <div class="evento-criar-info-card">
+                <h3>📅 Cadastro de eventos</h3>
+                <p>
+                    Preencha os dados principais do evento para que ele seja exibido aos alunos na área de eventos institucionais.
+                </p>
+            </div>
+
+            <div class="evento-criar-info-card">
+                <h3>👤 Coordenador responsável</h3>
+                <p>
+                    O coordenador responsável deve ser definido automaticamente pelo sistema com base no usuário logado.
+                </p>
+            </div>
+
+            <div class="evento-criar-info-card">
+                <h3>✅ Após o cadastro</h3>
+                <p>
+                    O evento poderá ser visualizado na listagem de eventos disponíveis.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+@section Scripts {
+    @if (!string.IsNullOrWhiteSpace(mensagem))
+    {
+        <script>
+            const mensagemEvento = @Html.Raw(JsonSerializer.Serialize(mensagem));
+            alert(mensagemEvento);
+        </script>
+    }
+}

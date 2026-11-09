@@ -1,0 +1,122 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var tipoUsuario = Context.Session.GetString("Tipo");
+    var nomeUsuario = Context.Session.GetString("Nome");
+    var usuarioLogado = Context.Session.GetInt32("UsuarioId") != null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0914" />
+    <title>@ViewData["Title"] - SistemaEventos</title>
+    <link rel="stylesheet" href="~/css/Layout.css" />
+    <link rel="stylesheet" href="~/css/Theme.css" />
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <a asp-controller="Home" asp-action="Index" class="sidebar-brand" aria-label="Página inicial do Sistema de Eventos">
+            <div class="sidebar-logo"><span>SE</span></div>
+            <div class="sidebar-brand-copy">
+                <strong>EVENTOS</strong>
+                <small>PORTAL ACADÊMICO</small>
+            </div>
+        </a>
+
+        <div class="sidebar-caption">NAVEGAÇÃO</div>
+        <nav class="sidebar-menu">
+            <a asp-controller="Home" asp-action="Index"><span class="sidebar-link-icon">⌂</span><span>Início</span></a>
+            <a asp-controller="Eventos" asp-action="ListaEventos"><span class="sidebar-link-icon">▦</span><span>Eventos</span></a>
+
+            @if (tipoUsuario == "Aluno")
+            {
+                <a asp-controller="Inscricao" asp-action="MinhasInscricoes"><span class="sidebar-link-icon">▤</span><span>Minhas inscrições</span></a>
+                <a asp-controller="Inscricao" asp-action="ConfirmaPresença"><span class="sidebar-link-icon">◉</span><span>Confirmar presença</span></a>
+                <a asp-controller="Inscricao" asp-action="Certificado"><span class="sidebar-link-icon">✧</span><span>Certificados</span></a>
+            }
+
+            @if (tipoUsuario == "Coordenador" || tipoUsuario == "Diretor")
+            {
+                <a asp-controller="Eventos" asp-action="Criar"><span class="sidebar-link-icon">＋</span><span>Criar evento</span></a>
+                <a asp-controller="Eventos" asp-action="Gerenciar"><span class="sidebar-link-icon">⚙</span><span>Gerenciar eventos</span></a>
+            }
+
+            @if (tipoUsuario == "Diretor")
+            {
+                <a asp-controller="Usuario" asp-action="CadastroCoordenador"><span class="sidebar-link-icon">♙</span><span>Cadastrar coordenador</span></a>
+            }
+        </nav>
+
+        <div class="sidebar-bottom">
+            <span class="sidebar-bottom-mark"></span>
+            <div><strong>Espaço acadêmico</strong><small>Organização em um só lugar</small></div>
+        </div>
+    </aside>
+
+    <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-wrapper">
+        <header class="topbar">
+            <div class="topbar-heading">
+                <span class="topbar-overline">SISTEMA ACADÊMICO</span>
+                <a asp-controller="Home" asp-action="Index" class="topbar-title">Gestão de Eventos</a>
+            </div>
+
+            <div class="topbar-user">
+                @if (usuarioLogado)
+                {
+                    <span class="topbar-avatar">@(string.IsNullOrWhiteSpace(nomeUsuario) ? "U" : nomeUsuario.Substring(0, 1).ToUpper())</span>
+                    <span class="topbar-name">@nomeUsuario</span>
+                    <a asp-controller="Usuario" asp-action="Perfil" class="topbar-action">Perfil</a>
+                    <a asp-controller="Usuario" asp-action="Logout" class="topbar-action topbar-logout">Sair <span aria-hidden="true">↗</span></a>
+                }
+                else
+                {
+                    <a asp-controller="Usuario" asp-action="Login" class="topbar-action">Entrar <span aria-hidden="true">↗</span></a>
+                }
+            </div>
+        </header>
+
+        <main class="content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+        function abrirMenu() {
+            document.body.classList.add("sidebar-open");
+            sidebarToggle.setAttribute("aria-label", "Fechar menu");
+            sidebarToggle.setAttribute("aria-expanded", "true");
+        }
+
+        function fecharMenu() {
+            document.body.classList.remove("sidebar-open");
+            sidebarToggle.setAttribute("aria-label", "Abrir menu");
+            sidebarToggle.setAttribute("aria-expanded", "false");
+        }
+
+        sidebarToggle.addEventListener("click", function () {
+            if (document.body.classList.contains("sidebar-open")) fecharMenu();
+            else abrirMenu();
+        });
+
+        sidebarOverlay.addEventListener("click", fecharMenu);
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") fecharMenu();
+        });
+    </script>
+    <script src="~/js/ui.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,126 @@
+﻿@model SistemaEventos.Models.MinhasInscricoesViewModel
+
+@{
+    ViewData["Title"] = "Minhas Inscrições";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Eventos.css" />
+<link rel="stylesheet" href="~/css/MinhasInscricoes.css" />
+
+<section class="eventos-page">
+
+    <div class="eventos-header">
+        <h1>Minhas Inscrições</h1>
+        <p>Eventos em que você está inscrito.</p>
+    </div>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="evento-alert-success">✔ @TempData["Sucesso"]</div>
+    }
+    @if (TempData["Erro"] != null)
+    {
+        <div class="evento-alert-erro">✖ @TempData["Erro"]</div>
+    }
+
+    @if (!Model.Inscricoes.Any())
+    {
+        <div class="eventos-empty">
+            <div class="eventos-empty-icon">📝</div>
+            <h2>Nenhuma inscrição encontrada</h2>
+            <p>Você ainda não está inscrito em nenhum evento.</p>
+            <div class="eventos-empty-busca">
+                <a asp-controller="Eventos"
+                       asp-action="ListaEventos"
+                       class="btn-evento-primary"
+                       style="display:inline-flex; padding:12px 24px; border-radius:12px; text-decoration:none;">
+                    Ver eventos disponíveis
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="eventos-grid">
+
+            @foreach (var inscricao in Model.Inscricoes)
+            {
+                @* Calcula janela de validação: início do evento até 24h após o fim *@
+                var inicioEvento = inscricao.DataEvento.Date + inscricao.HoraInicio;
+                var fimJanela = inscricao.DataEvento.Date + inscricao.HoraFim + TimeSpan.FromHours(24);
+                var dentroJanela = DateTime.Now >= inicioEvento && DateTime.Now <= fimJanela;
+
+                <article class="evento-card">
+
+                    @* Badge de presença *@
+                    @if (inscricao.PresencaConfirmada)
+                    {
+                        <span class="mi-badge-confirmado">✔ Presença confirmada</span>
+                    }
+                    else
+                    {
+                        <span class="mi-badge-pendente">⏳ Presença pendente</span>
+                    }
+
+                    <h2>@inscricao.NomeEvento</h2>
+
+                    <div class="evento-infos">
+                        <p><span>📅</span> @inscricao.DataEvento.ToString("dd/MM/yyyy")</p>
+                        <p><span>🕐</span> @inscricao.HoraInicio.ToString(@"hh\:mm") - @inscricao.HoraFim.ToString(@"hh\:mm")</p>
+                        <p><span>📍</span> @inscricao.Local</p>
+                        <p><span>🗓</span> Inscrito em @inscricao.DataInscricao.ToString("dd/MM/yyyy")</p>
+                    </div>
+
+                    <div class="evento-card-actions">
+
+                        @* Coluna 1: Validar presença ou Certificado *@
+                        @if (inscricao.CertificadoDisponivel)
+                        {
+                            <a asp-controller="Inscricao"
+                                   asp-action="Certificado"
+                                   class="btn-evento-primary">
+                                🎓 Certificado
+                            </a>
+                        }
+                        else if (!inscricao.PresencaConfirmada && dentroJanela)
+                        {
+                            <a asp-controller="Inscricao"
+                                   asp-action="ConfirmaPresenca"
+                                   class="btn-evento-primary">
+                                ✅ Validar presença
+                            </a>
+                        }
+                        else if (!inscricao.PresencaConfirmada)
+                        {
+                            <span class="btn-evento-outline mi-btn-disabled">🔒 Validar presença</span>
+                        }
+                        else
+                        {
+                            <span class="btn-evento-outline mi-btn-disabled">⏳ Certificado pendente</span>
+                        }
+
+                        @* Coluna 2: Cancelar inscrição (só se presença não confirmada) *@
+                        @if (!inscricao.PresencaConfirmada)
+                        {
+                            <form asp-action="Cancelar" method="post"
+                                  onsubmit="return confirm('Deseja cancelar a inscrição em \'@inscricao.NomeEvento\'?')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="inscricaoId" value="@inscricao.InscricaoId" />
+                                <button type="submit" class="btn-evento-cancelar">Cancelar</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="btn-evento-outline mi-btn-disabled">✔ Confirmado</span>
+                        }
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+    }
+
+</section>

@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Início";
+
+    var nomeUsuario = ViewBag.NomeUsuario as string ?? "Usuário";
+    var tipoUsuario = ViewBag.TipoUsuario as string ?? "";
+}
+
+<link rel="stylesheet" href="~/css/Home.css" />
+
+<section class="home-page">
+
+    <div class="home-hero">
+        <div>
+            <span class="home-badge">@tipoUsuario</span>
+
+            <h1>Bem-vindo, @nomeUsuario</h1>
+
+            @if (tipoUsuario == "Aluno")
+            {
+                <p>Acompanhe eventos disponíveis, suas inscrições, presença e certificados.</p>
+            }
+            else if (tipoUsuario == "Coordenador")
+            {
+                <p>Gerencie eventos institucionais, acompanhe atividades e organize novas ações acadêmicas.</p>
+            }
+            else if (tipoUsuario == "Diretor")
+            {
+                <p>Administre coordenadores, eventos e acompanhe a organização geral do sistema.</p>
+            }
+            else
+            {
+                <p>Acesse as funcionalidades disponíveis no sistema.</p>
+            }
+        </div>
+    </div>
+
+    @if (tipoUsuario == "Aluno")
+    {
+        <div class="home-section-title">
+            <h2>Área do aluno</h2>
+            <p>Acesse rapidamente suas principais funções.</p>
+        </div>
+
+        <div class="home-grid">
+
+            <a asp-controller="Eventos" asp-action="ListaEventos" class="home-card">
+                <div class="home-card-icon">📅</div>
+                <h3>Eventos disponíveis</h3>
+                <p>Consulte palestras, workshops e eventos institucionais abertos para inscrição.</p>
+                <span>Acessar eventos</span>
+            </a>
+
+            <a asp-controller="Inscricao" asp-action="MinhasInscricoes" class="home-card">
+                <div class="home-card-icon">📝</div>
+                <h3>Minhas inscrições</h3>
+                <p>Veja os eventos em que você já está inscrito.</p>
+                <span>Ver inscrições</span>
+            </a>
+
+            <a asp-controller="Inscricao" asp-action="ConfirmaPresenca" class="home-card">
+                <div class="home-card-icon">✅</div>
+                <h3>Confirmar presença</h3>
+                <p>Informe o código disponibilizado durante o evento para registrar sua presença.</p>
+                <span>Confirmar presença</span>
+            </a>
+
+            <a asp-controller="Inscricao" asp-action="Certificado" class="home-card">
+                <div class="home-card-icon">🎓</div>
+                <h3>Certificados</h3>
+                <p>Acesse certificados emitidos após a confirmação de participação.</p>
+                <span>Ver certificados</span>
+            </a>
+
+        </div>
+    }
+
+    @if (tipoUsuario == "Coordenador")
+    {
+        <div class="home-section-title">
+            <h2>Área do coordenador</h2>
+            <p>Crie, visualize e gerencie os eventos sob sua responsabilidade.</p>
+        </div>
+
+        <div class="home-grid">
+
+            <a asp-controller="Eventos" asp-action="Criar" class="home-card destaque">
+                <div class="home-card-icon">➕</div>
+                <h3>Criar evento</h3>
+                <p>Cadastre novos eventos institucionais informando data, horário, local e descrição.</p>
+                <span>Criar novo evento</span>
+            </a>
+
+            <a asp-controller="Eventos" asp-action="Gerenciar" class="home-card">
+                <div class="home-card-icon">🛠️</div>
+                <h3>Gerenciar eventos</h3>
+                <p>Acompanhe, edite ou organize eventos cadastrados no sistema.</p>
+                <span>Gerenciar</span>
+            </a>
+
+            <a asp-controller="Eventos" asp-action="ListaEventos" class="home-card">
+                <div class="home-card-icon">📅</div>
+                <h3>Eventos institucionais</h3>
+                <p>Visualize a listagem de eventos disponíveis para os usuários.</p>
+                <span>Ver eventos</span>
+            </a>
+
+            <a asp-controller="Usuario" asp-action="Perfil" class="home-card">
+                <div class="home-card-icon">👤</div>
+                <h3>Meu perfil</h3>
+                <p>Consulte suas informações e atualize dados da conta.</p>
+                <span>Acessar perfil</span>
+            </a>
+
+        </div>
+    }
+
+    @if (tipoUsuario == "Diretor")
+    {
+        <div class="home-section-title">
+            <h2>Área do diretor</h2>
+            <p>Administre coordenadores e acompanhe os eventos institucionais.</p>
+        </div>
+
+        <div class="home-grid">
+
+            <a asp-controller="Usuario" asp-action="CadastroCoordenador" class="home-card destaque">
+                <div class="home-card-icon">👥</div>
+                <h3>Cadastrar coordenador</h3>
+                <p>Cadastre novos coordenadores responsáveis pela criação e gestão de eventos.</p>
+                <span>Cadastrar</span>
+            </a>
+
+            <a asp-controller="Eventos" asp-action="Criar" class="home-card">
+                <div class="home-card-icon">➕</div>
+                <h3>Criar evento</h3>
+                <p>Cadastre eventos institucionais diretamente pelo sistema.</p>
+                <span>Criar evento</span>
+            </a>
+
+            <a asp-controller="Eventos" asp-action="Gerenciar" class="home-card">
+                <div class="home-card-icon">🛠️</div>
+                <h3>Gerenciar eventos</h3>
+                <p>Acompanhe e organize eventos cadastrados na instituição.</p>
+                <span>Gerenciar eventos</span>
+            </a>
+
+            <a asp-controller="Eventos" asp-action="ListaEventos" class="home-card">
+                <div class="home-card-icon">📅</div>
+                <h3>Eventos institucionais</h3>
+                <p>Visualize a listagem geral de eventos disponíveis.</p>
+                <span>Ver eventos</span>
+            </a>
+
+        </div>
+    }
+
+</section>
