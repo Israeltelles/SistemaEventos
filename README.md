@@ -1,101 +1,103 @@
 # Sistema de Gestão de Eventos
 
-Projeto acadêmico desenvolvido para a disciplina de Desenvolvimento Web utilizando **ASP.NET Core MVC**.
+Projeto acadêmico desenvolvido em grupo, utilizando ASP.NET Core MVC, com o objetivo de facilitar o gerenciamento de eventos acadêmicos, inscrições de participantes, controle de presença e emissão de certificados.
 
-O sistema tem como objetivo permitir o gerenciamento de eventos acadêmicos, inscrições de alunos e geração de certificados de participação.
+A aplicação oferece diferentes níveis de acesso, permitindo que diretores acadêmicos, coordenadores e alunos utilizem funcionalidades específicas de acordo com seus respectivos perfis.
 
----
+## Funcionalidades
 
-## Funcionalidades do Sistema
+### Diretor Acadêmico
+- Cadastro e gerenciamento de coordenadores acadêmicos.
+- Acesso às funcionalidades administrativas do sistema.
 
-O sistema possui três tipos principais de usuários:
+### Coordenador
+- Criação e gerenciamento de eventos.
+- Definição de informações como título, descrição, data, horário e local.
+- Disponibilização de código QR para confirmação de presença.
+- Gerenciamento dos eventos cadastrados.
 
-**Diretor Acadêmico**
+### Aluno
+- Consulta de eventos disponíveis.
+- Realização de inscrições em eventos.
+- Consulta das próprias inscrições.
+- Confirmação de presença por meio de código QR.
+- Geração e download de certificados de participação.
 
-* Cadastrar coordenadores acadêmicos
+## Tecnologias utilizadas
 
-**Coordenador**
+| Tecnologia | Aplicação |
+|---|---|
+| C# | Linguagem principal |
+| ASP.NET Core MVC | Desenvolvimento da aplicação web |
+| Entity Framework Core | Mapeamento objeto-relacional (ORM) |
+| SQL Server | Banco de dados relacional |
+| HTML5 | Estrutura das páginas |
+| CSS3 | Estilização e identidade visual |
+| JavaScript | Interatividade no front-end |
+| Bootstrap | Componentes e responsividade |
 
-* Criar eventos
-* Definir data, local e horário
-* Gerar código de confirmação de presença
+## Arquitetura do projeto
 
-**Aluno**
+A aplicação utiliza o padrão arquitetural **Model-View-Controller (MVC)**, separando as responsabilidades da aplicação em três camadas principais:
 
-* Visualizar eventos disponíveis
-* Realizar inscrição em eventos
-* Confirmar presença utilizando código fornecido durante o evento
-* Realizar download do certificado de participação
+- **Models:** representação das entidades e dados do sistema.
+- **Views:** interface visual e apresentação das informações.
+- **Controllers:** processamento das requisições e comunicação entre as camadas.
 
----
+O Entity Framework Core é utilizado para realizar a comunicação entre a aplicação e o banco de dados.
 
-## Tecnologias Utilizadas
+## Estrutura de diretórios
 
-### Backend
-
-* C#
-* ASP.NET Core MVC
-* Entity Framework Core
-
-### Banco de Dados
-
-* SQL Server
-
-### Frontend
-
-* HTML5
-* CSS3
-* JavaScript
-* Bootstrap
-
-## Arquitetura do Sistema
-
-O projeto utiliza a arquitetura **MVC (Model-View-Controller)**.
-
-* **Models** → Representam os dados do sistema
-* **Views** → Interface apresentada ao usuário
-* **Controllers** → Controlam a lógica da aplicação
-
----
-
-## Estrutura de Pastas
-
-```
-SistemaGestaoEventos
-
-Controllers
-Models
-Views
-wwwroot
-
+```text
+SistemaEventos/
+│
+├── Controllers/
+├── Data/
+├── Migrations/
+├── Models/
+├── Properties/
+├── Views/
+├── wwwroot/
+│
+├── Program.cs
+├── appsettings.json
+├── SistemaEventos.csproj
+└── SistemaEventos.sln
 ```
 
+## Como executar o projeto
+
+### Pré-requisitos
+
+- Visual Studio 2022 ou compatível.
+- .NET SDK correspondente à versão utilizada no projeto.
+- Microsoft SQL Server.
+- Entity Framework Core.
+
+### Configuração
+
+1. Clone este repositório.
+2. Abra o arquivo `SistemaEventos.sln` no Visual Studio.
+3. Configure a conexão com o SQL Server no arquivo `appsettings.json`.
+4. Verifique a configuração do banco de dados e das migrations.
+5. Restaure os pacotes NuGet necessários.
+6. Execute a aplicação pelo Visual Studio.
+
+## Interface do sistema
+
+A interface utiliza uma identidade visual baseada em tons escuros, com predominância de preto e roxo, buscando proporcionar uma experiência visual consistente e intuitiva.
+
+## Objetivo acadêmico
+
+O projeto foi desenvolvido com o propósito de aplicar conhecimentos relacionados a:
+
+- Desenvolvimento de aplicações web com C#.
+- Arquitetura MVC.
+- Persistência e manipulação de dados com Entity Framework Core.
+- Integração com banco de dados SQL Server.
+- Desenvolvimento de interfaces com HTML, CSS e JavaScript.
+- Organização e desenvolvimento colaborativo de software.
+
 ---
 
-## Equipe do Projeto
-
-Projeto desenvolvido em grupo para atividade acadêmica.
-
-Integrantes:
-
-* Israel Lemes da Silva Telles | https://github.com/Israeltelles
-* Maria Cecília Barbosa Chiodi | https://github.com/cecichiodi
-* Gustavo Ferreira da Silva | https://github.com/gustavo14fds-design
-* Rafael D’Angio Ribeiro | https://github.com/faaeldr
-
----
-
-## Objetivo do Projeto
-
-Desenvolver uma aplicação web completa que permita a gestão de eventos acadêmicos, aplicando conceitos de:
-
-* desenvolvimento web
-* arquitetura MVC
-* integração com banco de dados
-* trabalho em equipe utilizando Git e GitHub
-
----
-
-## Status do Projeto
-
-🚧 Em desenvolvimento
+**Projeto acadêmico — Sistema de Gestão de Eventos.**
